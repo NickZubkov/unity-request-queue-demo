@@ -1,5 +1,6 @@
 using RequestQueueDemo.App.Config;
 using RequestQueueDemo.App.Features.Clicker;
+using RequestQueueDemo.App.Features.Weather;
 using RequestQueueDemo.App.Navigation;
 using UnityEngine;
 using Zenject;
@@ -13,7 +14,7 @@ namespace RequestQueueDemo.App.Installers
         [SerializeField] private FloatingText _floatingTextPrefab;
         [SerializeField] private Transform _floatingTextRoot;
         [SerializeField] private TapParticle _tapParticlePrefab;
-        [SerializeField] private GameObject _weatherPanel;
+        [SerializeField] private WeatherView _weatherView;
         [SerializeField] private GameObject _breedsPanel;
 
         public override void InstallBindings()
@@ -36,8 +37,11 @@ namespace RequestQueueDemo.App.Installers
             Container.BindMemoryPool<TapParticle, TapParticle.Pool>()
                 .WithInitialSize(4).FromComponentInNewPrefab(_tapParticlePrefab).UnderTransformGroup("TapParticles");
 
-            // --- Заглушки оставшихся вкладок (заменяются на этапах 4–5) ---
-            Container.Bind<ITab>().FromInstance(new StubTab(TabId.Weather, _weatherPanel)).AsCached();
+            // --- Погода ---
+            Container.Bind<IWeatherView>().FromInstance(_weatherView).AsSingle();
+            Container.BindInterfacesAndSelfTo<WeatherPresenter>().AsSingle();
+
+            // --- Заглушка оставшейся вкладки (заменяется на этапе 5) ---
             Container.Bind<ITab>().FromInstance(new StubTab(TabId.Breeds, _breedsPanel)).AsCached();
         }
     }
