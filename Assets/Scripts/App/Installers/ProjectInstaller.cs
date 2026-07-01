@@ -1,3 +1,4 @@
+using RequestQueueDemo.Core.Queue;
 using Zenject;
 
 namespace RequestQueueDemo.App.Installers
@@ -6,7 +7,7 @@ namespace RequestQueueDemo.App.Installers
     {
         public override void InstallBindings()
         {
-            // Биндинги project-scope добавляются на этапах 1–2.
+            Container.BindInterfacesAndSelfTo<RequestQueue>().AsSingle();
         }
     }
 }
