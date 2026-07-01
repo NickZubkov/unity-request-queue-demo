@@ -46,5 +46,8 @@ sysinfo.txt
 .DS_Store
 Thumbs.db
 
+# Docs (local only, not tracked)
+/docs/
+
 # Gradle
 .gradle/
