@@ -1,3 +1,5 @@
+using RequestQueueDemo.App.Config;
+using RequestQueueDemo.App.Features.Clicker;
 using RequestQueueDemo.App.Navigation;
 using UnityEngine;
 using Zenject;
@@ -6,7 +8,11 @@ namespace RequestQueueDemo.App.Installers
 {
     public sealed class GameInstaller : MonoInstaller
     {
-        [SerializeField] private GameObject _clickerPanel;
+        [SerializeField] private ClickerConfig _clickerConfig;
+        [SerializeField] private ClickerView _clickerView;
+        [SerializeField] private FloatingText _floatingTextPrefab;
+        [SerializeField] private Transform _floatingTextRoot;
+        [SerializeField] private TapParticle _tapParticlePrefab;
         [SerializeField] private GameObject _weatherPanel;
         [SerializeField] private GameObject _breedsPanel;
 
@@ -14,8 +20,23 @@ namespace RequestQueueDemo.App.Installers
         {
             Container.BindInterfacesAndSelfTo<NavigationController>().AsSingle();
 
-            // Временные заглушки вкладок (заменяются реальными презентерами на этапах 3–5).
-            Container.Bind<ITab>().FromInstance(new StubTab(TabId.Clicker, _clickerPanel)).AsCached();
+            // --- Кликер ---
+            Container.Bind<ClickerConfig>().FromInstance(_clickerConfig).AsSingle();
+            Container.Bind<CurrencyModel>().AsSingle();
+            Container.Bind<EnergyModel>().AsSingle();
+            Container.Bind<ClickerService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<AutoCollectService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EnergyRegenService>().AsSingle();
+            Container.Bind<IClickerView>().FromInstance(_clickerView).AsSingle();
+            Container.BindInterfacesAndSelfTo<ClickerPresenter>().AsSingle();
+
+            // FloatingText — UI (TMP), рендерится только под Canvas: спавним пул под дочерним объектом Canvas.
+            Container.BindMemoryPool<FloatingText, FloatingText.Pool>()
+                .WithInitialSize(8).FromComponentInNewPrefab(_floatingTextPrefab).UnderTransform(_floatingTextRoot);
+            Container.BindMemoryPool<TapParticle, TapParticle.Pool>()
+                .WithInitialSize(4).FromComponentInNewPrefab(_tapParticlePrefab).UnderTransformGroup("TapParticles");
+
+            // --- Заглушки оставшихся вкладок (заменяются на этапах 4–5) ---
             Container.Bind<ITab>().FromInstance(new StubTab(TabId.Weather, _weatherPanel)).AsCached();
             Container.Bind<ITab>().FromInstance(new StubTab(TabId.Breeds, _breedsPanel)).AsCached();
         }
