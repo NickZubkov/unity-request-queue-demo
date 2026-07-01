@@ -1,0 +1,6 @@
+{
+    "name": "RequestQueueDemo.Core",
+    "rootNamespace": "RequestQueueDemo.Core",
+    "references": ["UniTask", "UniRx", "Newtonsoft.Json"],
+    "autoReferenced": true
+}

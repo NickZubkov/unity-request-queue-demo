@@ -1,0 +1,6 @@
+{
+    "name": "RequestQueueDemo.App",
+    "rootNamespace": "RequestQueueDemo.App",
+    "references": ["RequestQueueDemo.Core", "Zenject", "UniTask", "UniRx", "UniTask.DOTween", "DOTween.Modules", "Unity.TextMeshPro", "UnityEngine.UI"],
+    "autoReferenced": true
+}
