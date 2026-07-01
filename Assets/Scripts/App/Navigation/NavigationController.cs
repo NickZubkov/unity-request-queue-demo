@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using Zenject;
 
 namespace RequestQueueDemo.App.Navigation
@@ -7,7 +8,12 @@ namespace RequestQueueDemo.App.Navigation
     public sealed class NavigationController : IInitializable
     {
         private readonly Dictionary<TabId, ITab> _tabs;
-        private ITab _current;
+        private readonly ReactiveProperty<TabId> _current = new();
+        private ITab _currentTab;
+
+        // Текущая активная вкладка. Кнопки навигации подсвечивают активную
+        // именно по этому состоянию, а не по выделению EventSystem.
+        public IReadOnlyReactiveProperty<TabId> Current => _current;
 
         public NavigationController(List<ITab> tabs)
         {
@@ -18,10 +24,11 @@ namespace RequestQueueDemo.App.Navigation
 
         public void Switch(TabId id)
         {
-            if (_current != null && _current.Id == id) return;
-            _current?.OnExit();
-            _current = _tabs[id];
-            _current.OnEnter();
+            if (_currentTab != null && _currentTab.Id == id) return;
+            _currentTab?.OnExit();
+            _currentTab = _tabs[id];
+            _currentTab.OnEnter();
+            _current.Value = id;
         }
     }
 }

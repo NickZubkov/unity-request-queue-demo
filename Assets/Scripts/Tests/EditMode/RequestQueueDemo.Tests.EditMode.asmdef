@@ -3,7 +3,7 @@
     "references": ["RequestQueueDemo.Core", "UniTask", "UniRx", "UnityEngine.TestRunner", "UnityEditor.TestRunner"],
     "includePlatforms": ["Editor"],
     "overrideReferences": true,
-    "precompiledReferences": ["nunit.framework.dll"],
+    "precompiledReferences": ["nunit.framework.dll", "Newtonsoft.Json.dll"],
     "autoReferenced": false,
     "defineConstraints": ["UNITY_INCLUDE_TESTS"]
 }
