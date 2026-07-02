@@ -11,7 +11,7 @@ namespace RequestQueueDemo.App.Features.Clicker
     {
         [SerializeField] private TMP_Text _text;
         [SerializeField] private CanvasGroup _group;
-        [SerializeField] private float _floatingDisatnce;
+        [SerializeField] private float _floatingDistance;
         [SerializeField] private float _floatingDuration;
 
         private Pool _pool;
@@ -23,8 +23,8 @@ namespace RequestQueueDemo.App.Features.Clicker
             _text.text = label;
             _group.alpha = 1f;
             _tween = DOTween.Sequence()
-                .Append(transform.DOMoveY(screenPos.y + _floatingDisatnce, _floatingDuration))
-                .Join(_group.DOFade(0f, 0.8f))
+                .Append(transform.DOMoveY(screenPos.y + _floatingDistance, _floatingDuration))
+                .Join(_group.DOFade(0f, _floatingDuration))
                 .OnComplete(() => _pool.Despawn(this))
                 .SetLink(gameObject);
         }

@@ -30,7 +30,8 @@ namespace RequestQueueDemo.App.Common.Ui
             _spinTween = _loadingImage
                 .DOLocalRotate(new Vector3(0f, 0f, -360f), 1f, RotateMode.FastBeyond360)
                 .SetEase(Ease.Linear)
-                .SetLoops(-1, LoopType.Restart);
+                .SetLoops(-1, LoopType.Restart)
+                .SetLink(gameObject);
         }
 
         private void StopSpin()

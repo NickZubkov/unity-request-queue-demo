@@ -25,7 +25,7 @@ namespace RequestQueueDemo.App.Features.Breeds
 
         public void Hide()
         {
-            ClearLoading();
+            ClearList();
             _popup.Hide();
             _panel.SetActive(false);
         }

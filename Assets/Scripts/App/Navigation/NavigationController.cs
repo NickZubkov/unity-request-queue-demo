@@ -18,7 +18,11 @@ namespace RequestQueueDemo.App.Navigation
             _tabs = tabs.ToDictionary(t => t.Id);
         }
 
-        public void Initialize() => Switch(TabId.Clicker);
+        public void Initialize()
+        {
+            foreach (var tab in _tabs.Values) tab.OnExit();
+            Switch(TabId.Clicker);
+        }
 
         public void Switch(TabId id)
         {

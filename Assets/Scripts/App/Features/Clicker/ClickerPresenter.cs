@@ -33,9 +33,9 @@ namespace RequestQueueDemo.App.Features.Clicker
         {
             if (!_isActive) return;
 
-            if (result == TapResult.Success)
+            if (result.Success)
             {
-                _view.PlayTapVfx();
+                _view.PlayTapVfx(result.Reward);
                 _view.PlayButtonPunch();
             }
             else

@@ -162,5 +162,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 432266218795881662}
   _group: {fileID: 6194211357775852100}
-  _floatingDisatnce: 30
+  _floatingDistance: 30
   _floatingDuration: 0.5

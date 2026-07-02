@@ -25,7 +25,7 @@ namespace RequestQueueDemo.App.Features.Clicker
         {
             if (!_energy.TrySpend(cost)) { _taps.OnNext(TapResult.NoEnergy); return; }
             _currency.Add(reward);
-            _taps.OnNext(TapResult.Success);
+            _taps.OnNext(TapResult.Collected(reward));
         }
     }
 }

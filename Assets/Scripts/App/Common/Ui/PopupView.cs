@@ -22,14 +22,14 @@ namespace RequestQueueDemo.App.Common.Ui
             _root.SetActive(true);
             _group.DOKill();
             _group.alpha = 0f;
-            _group.DOFade(1f, 0.2f);
+            _group.DOFade(1f, 0.2f).SetLink(gameObject);
         }
 
         public void Hide()
         {
             if (!_root.activeSelf) return;
             _group.DOKill();
-            _group.DOFade(0f, 0.15f).OnComplete(() => _root.SetActive(false));
+            _group.DOFade(0f, 0.15f).OnComplete(() => _root.SetActive(false)).SetLink(gameObject);
         }
     }
 }

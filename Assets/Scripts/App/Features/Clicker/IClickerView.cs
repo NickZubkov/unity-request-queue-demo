@@ -9,7 +9,7 @@ namespace RequestQueueDemo.App.Features.Clicker
         public void Hide();
         public void SetCurrency(long amount);
         public void SetEnergy(int energy, int max);
-        public void PlayTapVfx();
+        public void PlayTapVfx(long reward);
         public void PlayButtonPunch();
         public void PlayNoEnergyFeedback();
         public void ClearVfx();

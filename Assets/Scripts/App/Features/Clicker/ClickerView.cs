@@ -52,11 +52,11 @@ namespace RequestQueueDemo.App.Features.Clicker
         public void SetCurrency(long amount) => _currencyText.text = amount.ToString();
         public void SetEnergy(int energy, int max) => _energyText.text = $"{energy}/{max}";
 
-        public void PlayTapVfx()
+        public void PlayTapVfx(long reward)
         {
             var pos = _buttonRect.position;
             _particlePool.Spawn().Play(pos);
-            _floatingPool.Spawn().Play(pos, "+1");
+            _floatingPool.Spawn().Play(pos, $"+{reward}");
             if (_clickSfx != null) _audioSource.PlayOneShot(_clickSfx);
         }
 

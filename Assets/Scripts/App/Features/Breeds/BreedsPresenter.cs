@@ -38,6 +38,7 @@ namespace RequestQueueDemo.App.Features.Breeds
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
+            _itemCts?.Dispose();
             _itemCts = null;
             _view.HideListLoader();
             _view.Hide();

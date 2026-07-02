@@ -11,10 +11,10 @@ namespace RequestQueueDemo.Core.Network
 
         public UnityWebRequestRunner(IApiConfig config) => _config = config;
 
-        public async UniTask<string> GetTextAsync(string url, CancellationToken ct)
+        public async UniTask<string> GetTextAsync(string url, CancellationToken ct, string accept = null)
         {
             using var request = UnityWebRequest.Get(url);
-            ApplyHeaders(request);
+            ApplyHeaders(request, accept);
             await SendAsync(request, ct);
             return request.downloadHandler.text;
         }
@@ -22,17 +22,17 @@ namespace RequestQueueDemo.Core.Network
         public async UniTask<Texture2D> GetTextureAsync(string url, CancellationToken ct)
         {
             using var request = UnityWebRequestTexture.GetTexture(url);
-            ApplyHeaders(request);
+            ApplyHeaders(request, accept: null);
             await SendAsync(request, ct);
             return DownloadHandlerTexture.GetContent(request);
         }
 
-        private void ApplyHeaders(UnityWebRequest request)
+        private void ApplyHeaders(UnityWebRequest request, string accept)
         {
             if (!string.IsNullOrEmpty(_config.UserAgent))
                 request.SetRequestHeader("User-Agent", _config.UserAgent);
-            if (!string.IsNullOrEmpty(_config.AcceptHeader))
-                request.SetRequestHeader("Accept", _config.AcceptHeader);
+            if (!string.IsNullOrEmpty(accept))
+                request.SetRequestHeader("Accept", accept);
         }
 
         private static async UniTask SendAsync(UnityWebRequest request, CancellationToken ct)

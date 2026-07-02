@@ -19,7 +19,7 @@ namespace RequestQueueDemo.Core.Network.Operations
 
         public async UniTask<WeatherInfo> ExecuteAsync(CancellationToken ct)
         {
-            var json = await _runner.GetTextAsync(_config.WeatherUrl, ct);
+            var json = await _runner.GetTextAsync(_config.WeatherUrl, ct, _config.AcceptHeader);
             var dto = JsonConvert.DeserializeObject<WeatherForecastResponse>(json);
             return WeatherMapper.ToDomain(dto);
         }
