@@ -1,4 +1,5 @@
 using RequestQueueDemo.App.Config;
+using RequestQueueDemo.App.Features.Breeds;
 using RequestQueueDemo.App.Features.Clicker;
 using RequestQueueDemo.App.Features.Weather;
 using RequestQueueDemo.App.Navigation;
@@ -15,7 +16,8 @@ namespace RequestQueueDemo.App.Installers
         [SerializeField] private Transform _floatingTextRoot;
         [SerializeField] private TapParticle _tapParticlePrefab;
         [SerializeField] private WeatherView _weatherView;
-        [SerializeField] private GameObject _breedsPanel;
+        [SerializeField] private BreedsView _breedsView;
+        [SerializeField] private BreedListItem _breedListItemPrefab;
 
         public override void InstallBindings()
         {
@@ -41,8 +43,11 @@ namespace RequestQueueDemo.App.Installers
             Container.Bind<IWeatherView>().FromInstance(_weatherView).AsSingle();
             Container.BindInterfacesAndSelfTo<WeatherPresenter>().AsSingle();
 
-            // --- Заглушка оставшейся вкладки (заменяется на этапе 5) ---
-            Container.Bind<ITab>().FromInstance(new StubTab(TabId.Breeds, _breedsPanel)).AsCached();
+            // --- Породы ---
+            Container.Bind<IBreedsView>().FromInstance(_breedsView).AsSingle();
+            Container.BindInterfacesAndSelfTo<BreedsPresenter>().AsSingle();
+            Container.BindMemoryPool<BreedListItem, BreedListItem.Pool>()
+                .WithInitialSize(10).FromComponentInNewPrefab(_breedListItemPrefab).UnderTransformGroup("BreedItems");
         }
     }
 }
