@@ -26,20 +26,15 @@ namespace RequestQueueDemo.App.Features.Clicker
 
         private async UniTaskVoid WaitAndDespawn(int generation)
         {
-            // Токен отмены при Destroy: на выходе из Play объект уничтожается, иначе ожидающий
-            // WaitWhile дёргает уже разрушенный _ps → MissingReferenceException. При отмене
-            // WaitWhile бросает OperationCanceledException, которую .Forget() гасит штатно.
             await UniTask.WaitWhile(() => _ps.IsAlive(true),
                                     cancellationToken: this.GetCancellationTokenOnDestroy());
-            // За время ожидания инстанс могли принудительно вернуть в пул и переиспользовать —
-            // тогда generation не совпадёт и повторного Despawn не будет.
             if (generation == _generation)
                 _pool.Despawn(this);
         }
 
         private void Stop()
         {
-            _generation++; // инвалидируем ожидающий WaitAndDespawn (защита от двойного Despawn)
+            _generation++;
             _ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
@@ -49,7 +44,7 @@ namespace RequestQueueDemo.App.Features.Clicker
 
             protected override void OnCreated(TapParticle item)
             {
-                base.OnCreated(item); // деактивирует префарм-инстансы, иначе висят активными на старте
+                base.OnCreated(item);
                 item._pool = this;
             }
 
@@ -62,11 +57,10 @@ namespace RequestQueueDemo.App.Features.Clicker
             protected override void OnDespawned(TapParticle item)
             {
                 _active.Remove(item);
-                item.Stop(); // и при обычном возврате, и при принудительном гашении
+                item.Stop();
                 base.OnDespawned(item);
             }
 
-            // Возврат всех активных партиклов в пул — при уходе с вкладки кликера.
             public void DespawnAllActive()
             {
                 foreach (var item in _active.ToArray())

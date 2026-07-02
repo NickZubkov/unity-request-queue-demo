@@ -37,7 +37,6 @@ namespace RequestQueueDemo.Core.Network
 
         private static async UniTask SendAsync(UnityWebRequest request, CancellationToken ct)
         {
-            // WithCancellation: при отмене токена прерывает запрос (Abort) и бросает OperationCanceledException.
             await request.SendWebRequest().WithCancellation(ct);
             if (request.result != UnityWebRequest.Result.Success)
                 throw new WebRequestException((int)request.responseCode, request.error);

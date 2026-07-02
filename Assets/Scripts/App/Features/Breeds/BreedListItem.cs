@@ -27,10 +27,9 @@ namespace RequestQueueDemo.App.Features.Breeds
             _id = id;
             _onClick = onClick;
             _label.text = $"{index} - {name}";
-            HideLoading(); // сброс на случай переиспользования из пула
+            HideLoading();
         }
 
-        // Крутит LoadingImage вокруг Z, пока грузятся факты этой породы.
         public void ShowLoading()
         {
             _spinTween?.Kill();
@@ -60,7 +59,7 @@ namespace RequestQueueDemo.App.Features.Breeds
         {
             protected override void OnCreated(BreedListItem item)
             {
-                base.OnCreated(item); // деактивирует префарм-инстансы, иначе висят активными на старте
+                base.OnCreated(item);
                 item._pool = this;
             }
         }

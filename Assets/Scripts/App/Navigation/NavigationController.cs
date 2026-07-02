@@ -11,8 +11,6 @@ namespace RequestQueueDemo.App.Navigation
         private readonly ReactiveProperty<TabId> _current = new();
         private ITab _currentTab;
 
-        // Текущая активная вкладка. Кнопки навигации подсвечивают активную
-        // именно по этому состоянию, а не по выделению EventSystem.
         public IReadOnlyReactiveProperty<TabId> Current => _current;
 
         public NavigationController(List<ITab> tabs)

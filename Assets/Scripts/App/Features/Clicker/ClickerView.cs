@@ -40,8 +40,6 @@ namespace RequestQueueDemo.App.Features.Clicker
             _defaultAnchoredPos = _buttonRect.anchoredPosition;
         }
 
-        // Сбрасывает кнопку к дефолту и убивает активные твины — иначе частые тапы
-        // складывают punch/shake и кнопка «распухает»/уползает.
         private void ResetButtonTransform()
         {
             _buttonRect.DOKill();
@@ -64,7 +62,6 @@ namespace RequestQueueDemo.App.Features.Clicker
 
         public void ClearVfx()
         {
-            // Возвращаем все активные «+1» и партиклы в пул — при уходе с вкладки кликера.
             _floatingPool.DespawnAllActive();
             _particlePool.DespawnAllActive();
         }

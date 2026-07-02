@@ -16,8 +16,8 @@ namespace RequestQueueDemo.App.Features.Breeds
         private readonly IWebRequestRunner _runner;
         private readonly IApiConfig _config;
 
-        private CancellationTokenSource _cts;       // жизнь вкладки
-        private CancellationTokenSource _itemCts;   // текущий запрос фактов
+        private CancellationTokenSource _cts;
+        private CancellationTokenSource _itemCts;
 
         public TabId Id => TabId.Breeds;
 
@@ -35,13 +35,12 @@ namespace RequestQueueDemo.App.Features.Breeds
 
         public void OnExit()
         {
-            _cts?.Cancel();           // линкован в _itemCts → отменяет и факты
+            _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
             _itemCts = null;
             _view.HideListLoader();
-            _view.Hide(); // сбрасывает спиннер активного элемента и закрывает попап
-
+            _view.Hide();
         }
 
         private async UniTaskVoid LoadBreedsAsync(CancellationToken ct)
@@ -59,7 +58,7 @@ namespace RequestQueueDemo.App.Features.Breeds
 
         private void OnBreedClicked(string breedId)
         {
-            _itemCts?.Cancel();       // отменить предыдущий запрос фактов (или удалить из очереди)
+            _itemCts?.Cancel();
             _itemCts?.Dispose();
             _itemCts = CancellationTokenSource.CreateLinkedTokenSource(_cts.Token);
             LoadFactsAsync(breedId, _itemCts.Token).Forget();

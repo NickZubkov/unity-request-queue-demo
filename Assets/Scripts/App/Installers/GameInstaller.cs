@@ -23,7 +23,6 @@ namespace RequestQueueDemo.App.Installers
         {
             Container.BindInterfacesAndSelfTo<NavigationController>().AsSingle();
 
-            // --- Кликер ---
             Container.Bind<ClickerConfig>().FromInstance(_clickerConfig).AsSingle();
             Container.Bind<CurrencyModel>().AsSingle();
             Container.Bind<EnergyModel>().AsSingle();
@@ -33,17 +32,14 @@ namespace RequestQueueDemo.App.Installers
             Container.Bind<IClickerView>().FromInstance(_clickerView).AsSingle();
             Container.BindInterfacesAndSelfTo<ClickerPresenter>().AsSingle();
 
-            // FloatingText — UI (TMP), рендерится только под Canvas: спавним пул под дочерним объектом Canvas.
             Container.BindMemoryPool<FloatingText, FloatingText.Pool>()
                 .WithInitialSize(8).FromComponentInNewPrefab(_floatingTextPrefab).UnderTransform(_floatingTextRoot);
             Container.BindMemoryPool<TapParticle, TapParticle.Pool>()
                 .WithInitialSize(4).FromComponentInNewPrefab(_tapParticlePrefab).UnderTransformGroup("TapParticles");
 
-            // --- Погода ---
             Container.Bind<IWeatherView>().FromInstance(_weatherView).AsSingle();
             Container.BindInterfacesAndSelfTo<WeatherPresenter>().AsSingle();
 
-            // --- Породы ---
             Container.Bind<IBreedsView>().FromInstance(_breedsView).AsSingle();
             Container.BindInterfacesAndSelfTo<BreedsPresenter>().AsSingle();
             Container.BindMemoryPool<BreedListItem, BreedListItem.Pool>()

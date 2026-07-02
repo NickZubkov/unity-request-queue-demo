@@ -32,8 +32,6 @@ namespace RequestQueueDemo.Tests.EditMode
             var op = new FakeOperation<int>();
             var task = queue.EnqueueAsync(op);
             op.Complete(42);
-            // Очередь завершается синхронно в детерминированных EditMode-тестах,
-            // поэтому результат читаем без await (UTF 1.1.33 не поддерживает async Task-тесты).
             Assert.IsTrue(task.Status.IsCompletedSuccessfully());
             Assert.AreEqual(42, task.GetAwaiter().GetResult());
         }

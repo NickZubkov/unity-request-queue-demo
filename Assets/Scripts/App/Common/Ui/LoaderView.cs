@@ -6,7 +6,7 @@ namespace RequestQueueDemo.App.Common.Ui
     public sealed class LoaderView : MonoBehaviour
     {
         [SerializeField] private GameObject _root;
-        [SerializeField] private RectTransform _loadingImage; // опционально: крутящийся индикатор
+        [SerializeField] private RectTransform _loadingImage;
 
         private Tween _spinTween;
 

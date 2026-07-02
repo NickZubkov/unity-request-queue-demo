@@ -33,9 +33,6 @@ namespace RequestQueueDemo.App.Features.Breeds
         public void ShowListLoader() => _listLoader.Show();
         public void HideListLoader() => _listLoader.Hide();
 
-        // Спиннер загрузки фактов крутится на конкретном элементе списка.
-        // Ключевание по breedId переживает отмену/замену: отменённый прошлый запрос
-        // не гасит спиннер уже нового выбранного элемента.
         public void ShowFactsLoader(string breedId)
         {
             if (_loadingItem != null && _loadingItem.Id != breedId)

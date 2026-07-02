@@ -41,7 +41,7 @@ namespace RequestQueueDemo.App.Features.Clicker
 
             protected override void OnCreated(FloatingText item)
             {
-                base.OnCreated(item); // деактивирует префарм-инстансы, иначе висят активными на старте
+                base.OnCreated(item);
                 item._pool = this;
             }
 
@@ -54,11 +54,10 @@ namespace RequestQueueDemo.App.Features.Clicker
             protected override void OnDespawned(FloatingText item)
             {
                 _active.Remove(item);
-                item.KillTween(); // убиваем твин: и при обычном возврате, и при принудительном гашении
+                item.KillTween();
                 base.OnDespawned(item);
             }
 
-            // Возврат всех активных «+1» в пул — при уходе с вкладки кликера (гасим «в полёте»).
             public void DespawnAllActive()
             {
                 foreach (var item in _active.ToArray())

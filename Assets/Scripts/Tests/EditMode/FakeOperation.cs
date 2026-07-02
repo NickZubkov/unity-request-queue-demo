@@ -5,7 +5,6 @@ using RequestQueueDemo.Core.Queue;
 
 namespace RequestQueueDemo.Tests.EditMode
 {
-    // Операция с управляемым завершением: тест сам решает, когда она закончится.
     internal sealed class FakeOperation<T> : IRequestOperation<T>
     {
         private readonly UniTaskCompletionSource<T> _completion = new();
@@ -17,14 +16,10 @@ namespace RequestQueueDemo.Tests.EditMode
             Started = true;
             try
             {
-                // AttachExternalCancellation эмулирует контракт «прерваться по токену»
-                // (как реальный UnityWebRequest.WithCancellation).
                 return await _completion.Task.AttachExternalCancellation(ct);
             }
             catch (OperationCanceledException)
             {
-                // Ловим отмену здесь (а не через ct.Register): при синхронном возобновлении
-                // await продолжение освобождало бы регистрацию раньше, чем она сработает.
                 ObservedCancellation = true;
                 throw;
             }

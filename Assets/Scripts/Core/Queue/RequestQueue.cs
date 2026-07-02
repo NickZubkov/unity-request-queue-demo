@@ -38,7 +38,6 @@ namespace RequestQueueDemo.Core.Queue
 
         private void OnExternalCancel(IQueueItem item)
         {
-            // Синхронно на главном потоке. Running отменяется сам через linked-токен.
             if (item.Started) return;
             item.RemoveFromList();
             item.CancelPending();

@@ -31,9 +31,6 @@ namespace RequestQueueDemo.App.Features.Clicker
 
         private void OnTap(TapResult result)
         {
-            // Вне вкладки кликера VFX не проигрываем: автосбор тикает фоном на любой вкладке,
-            // а «+1»/партиклы спавнятся под Canvas и иначе были бы видны поверх другой вкладки.
-            // Счётчики при этом обновляются подписками выше — фоновое накопление сохраняется.
             if (!_isActive) return;
 
             if (result == TapResult.Success)
@@ -56,7 +53,7 @@ namespace RequestQueueDemo.App.Features.Clicker
         public void OnExit()
         {
             _isActive = false;
-            _view.ClearVfx(); // гасим «в полёте» — активные «+1»/партиклы возвращаются в пул
+            _view.ClearVfx();
             _view.Hide();
         }
 

@@ -23,7 +23,6 @@ namespace RequestQueueDemo.App.Common.Ui
             _group.DOKill();
             _group.alpha = 0f;
             _group.DOFade(1f, 0.2f);
-            // Высота подстраивается автоматически: VerticalLayoutGroup + ContentSizeFitter на контейнере (см. Task 5.4).
         }
 
         public void Hide()

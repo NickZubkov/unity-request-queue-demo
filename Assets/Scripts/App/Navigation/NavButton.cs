@@ -22,12 +22,9 @@ namespace RequestQueueDemo.App.Navigation
 
         private void Start()
         {
-            // Красим собственный образ кнопки — targetGraphic Button'а лежит на этом же объекте.
-            // Ссылку не выносим в инспектор: так нельзя промахнуться на чужой образ.
             _background = GetComponent<Image>();
             GetComponent<Button>().onClick.AddListener(OnClick);
 
-            // Подсветка активной вкладки — из состояния навигации, а не из выделения EventSystem.
             _navigation.Current
                 .Subscribe(active => _background.color = active == _tabId ? _activeColor : _inactiveColor)
                 .AddTo(_disposables);
@@ -36,7 +33,6 @@ namespace RequestQueueDemo.App.Navigation
         private void OnClick()
         {
             _navigation.Switch(_tabId);
-            // Снимаем выделение: иначе нажатая кнопка «залипает» выбранной в EventSystem.
             if (EventSystem.current != null)
                 EventSystem.current.SetSelectedGameObject(null);
         }
