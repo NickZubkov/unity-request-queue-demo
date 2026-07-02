@@ -12,22 +12,44 @@ namespace RequestQueueDemo.App.Features.Breeds
         [SerializeField] private GameObject _panel;
         [SerializeField] private Transform _listRoot;
         [SerializeField] private LoaderView _listLoader;
-        [SerializeField] private LoaderView _factsLoader;
         [SerializeField] private PopupView _popup;
 
         private BreedListItem.Pool _itemPool;
         private readonly List<BreedListItem> _spawned = new();
+        private BreedListItem _loadingItem;
 
         [Inject]
         public void Construct(BreedListItem.Pool itemPool) => _itemPool = itemPool;
 
         public void Show() => _panel.SetActive(true);
-        public void Hide() { _popup.Hide(); _panel.SetActive(false); }
+
+        public void Hide()
+        {
+            ClearLoading();
+            _popup.Hide();
+            _panel.SetActive(false);
+        }
 
         public void ShowListLoader() => _listLoader.Show();
         public void HideListLoader() => _listLoader.Hide();
-        public void ShowFactsLoader() => _factsLoader.Show();
-        public void HideFactsLoader() => _factsLoader.Hide();
+
+        // Спиннер загрузки фактов крутится на конкретном элементе списка.
+        // Ключевание по breedId переживает отмену/замену: отменённый прошлый запрос
+        // не гасит спиннер уже нового выбранного элемента.
+        public void ShowFactsLoader(string breedId)
+        {
+            if (_loadingItem != null && _loadingItem.Id != breedId)
+                _loadingItem.HideLoading();
+            _loadingItem = FindItem(breedId);
+            _loadingItem?.ShowLoading();
+        }
+
+        public void HideFactsLoader(string breedId)
+        {
+            if (_loadingItem != null && _loadingItem.Id == breedId)
+                ClearLoading();
+        }
+
         public void ShowPopup(string title, string body) => _popup.Show(title, body);
 
         public void RenderBreeds(IReadOnlyList<Breed> breeds, Action<string> onBreedClick)
@@ -42,8 +64,23 @@ namespace RequestQueueDemo.App.Features.Breeds
             }
         }
 
+        private BreedListItem FindItem(string breedId)
+        {
+            foreach (var item in _spawned)
+                if (item.Id == breedId) return item;
+            return null;
+        }
+
+        private void ClearLoading()
+        {
+            if (_loadingItem == null) return;
+            _loadingItem.HideLoading();
+            _loadingItem = null;
+        }
+
         private void ClearList()
         {
+            ClearLoading();
             foreach (var item in _spawned) item.Despawn();
             _spawned.Clear();
         }

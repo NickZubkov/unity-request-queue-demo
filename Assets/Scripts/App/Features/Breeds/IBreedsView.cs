@@ -11,8 +11,8 @@ namespace RequestQueueDemo.App.Features.Breeds
         public void ShowListLoader();
         public void HideListLoader();
         public void RenderBreeds(IReadOnlyList<Breed> breeds, Action<string> onBreedClick);
-        public void ShowFactsLoader();
-        public void HideFactsLoader();
+        public void ShowFactsLoader(string breedId);
+        public void HideFactsLoader(string breedId);
         public void ShowPopup(string title, string body);
     }
 }

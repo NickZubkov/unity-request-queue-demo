@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,10 +11,14 @@ namespace RequestQueueDemo.App.Features.Breeds
     {
         [SerializeField] private TMP_Text _label;
         [SerializeField] private Button _button;
+        [SerializeField] private RectTransform _loadingImage;
 
         private Pool _pool;
         private string _id;
         private Action<string> _onClick;
+        private Tween _spinTween;
+
+        public string Id => _id;
 
         private void Awake() => _button.onClick.AddListener(() => _onClick?.Invoke(_id));
 
@@ -22,9 +27,34 @@ namespace RequestQueueDemo.App.Features.Breeds
             _id = id;
             _onClick = onClick;
             _label.text = $"{index} - {name}";
+            HideLoading(); // сброс на случай переиспользования из пула
         }
 
-        public void Despawn() => _pool.Despawn(this);
+        // Крутит LoadingImage вокруг Z, пока грузятся факты этой породы.
+        public void ShowLoading()
+        {
+            _spinTween?.Kill();
+            _loadingImage.localRotation = Quaternion.identity;
+            _loadingImage.gameObject.SetActive(true);
+            _spinTween = _loadingImage
+                .DOLocalRotate(new Vector3(0f, 0f, -360f), 1f, RotateMode.FastBeyond360)
+                .SetEase(Ease.Linear)
+                .SetLoops(-1, LoopType.Restart);
+        }
+
+        public void HideLoading()
+        {
+            _spinTween?.Kill();
+            _spinTween = null;
+            _loadingImage.localRotation = Quaternion.identity;
+            _loadingImage.gameObject.SetActive(false);
+        }
+
+        public void Despawn()
+        {
+            HideLoading();
+            _pool.Despawn(this);
+        }
 
         public sealed class Pool : MonoMemoryPool<BreedListItem>
         {

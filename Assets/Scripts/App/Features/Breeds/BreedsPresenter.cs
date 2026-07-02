@@ -40,8 +40,8 @@ namespace RequestQueueDemo.App.Features.Breeds
             _cts = null;
             _itemCts = null;
             _view.HideListLoader();
-            _view.HideFactsLoader();
-            _view.Hide();
+            _view.Hide(); // сбрасывает спиннер активного элемента и закрывает попап
+
         }
 
         private async UniTaskVoid LoadBreedsAsync(CancellationToken ct)
@@ -67,7 +67,7 @@ namespace RequestQueueDemo.App.Features.Breeds
 
         private async UniTaskVoid LoadFactsAsync(string breedId, CancellationToken ct)
         {
-            _view.ShowFactsLoader();
+            _view.ShowFactsLoader(breedId);
             try
             {
                 var facts = await _queue.EnqueueAsync(new BreedFactsRequestOperation(_runner, _config, breedId), ct);
@@ -75,7 +75,7 @@ namespace RequestQueueDemo.App.Features.Breeds
             }
             catch (OperationCanceledException) { }
             catch (Exception e) { Debug.LogWarning($"[Breed facts] {e.Message}"); }
-            finally { _view.HideFactsLoader(); }
+            finally { _view.HideFactsLoader(breedId); }
         }
 
         public void Dispose()
